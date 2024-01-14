@@ -1,0 +1,106 @@
+
+<title>Add Post | Connect Ninja</title>
+<style>
+	
+</style>
+
+{% extends "base.html" %}
+
+{% block content %}
+<header>
+    <form action="" method="post" class="login_system_forms" id="socialMediaForm">
+        <div class="form-control">
+            <label for="background_color">Background Color:</label>
+            <input type="text" id="background_color" name="background_color" value="{{ existing_profile.background_color }}" required>
+        </div>
+        <div class="form-control">
+            <label for="text_color">Text Color:</label>
+            <input type="text" id="text_color" name="text_color" value="{{ existing_profile.text_color }}" required>
+        </div>
+		<div class="form-control">
+            <label for="button_color">Button Color:</label>
+            <input type="text" id="button_color" name="button_color" value="{{ existing_profile.button_color }}" required>
+        </div>
+        <div class="form-control">
+            <label for="hover_color">Hover Color:</label>
+            <input type="text" id="hover_color" name="hover_color" value="{{ existing_profile.hover_color }}" required>
+        </div>
+
+        <div id="socialMediaFields">
+            <!-- Dynamic social media fields will be added here -->
+        </div>
+
+        {% for social_media in existing_profile.social_media_accounts %}
+        <div class="form-control">
+            <label for="platform">Platform:</label>
+            <input type="text" name="platform[]" value="{{ social_media.platform }}">
+            <label for="link">Link:</label>
+            <input type="text" name="link[]" value="{{ social_media.link }}">
+            <p>Clicks: {{social_media.clicks}}</p>
+            <button type="button" onclick="removeSocialMediaField(this)">Remove</button>
+        </div>
+        {% endfor %}
+
+
+        <button type="button" onclick="addSocialMediaField()">Add Social Media</button>
+        <input type="submit" value="Add to Profile">
+    </form>
+
+    <script>
+        function addSocialMediaField() {
+            var container = document.getElementById("socialMediaFields");
+            var newField = document.createElement("div");
+
+            newField.innerHTML = `
+                <div class="form-control">
+                    <label for="platform">Platform:</label>
+                    <input type="text" name="platform[]">
+                    <label for="link">Link:</label>
+                    <input type="text" name="link[]">
+                    <button type="button" onclick="removeSocialMediaField(this)">Remove</button>
+                </div>
+            `;
+
+            container.appendChild(newField);
+        }
+
+        function removeSocialMediaField(button) {
+            var field = button.parentNode;
+
+            var platformInput = field.querySelector('input[name="platform[]"]');
+            var linkInput = field.querySelector('input[name="link[]"]');
+    
+            // Access the values
+            var platformValue = platformInput.value;
+            var linkValue = linkInput.value;
+
+            console.log("Platform Value:", platformValue);
+            console.log("Link Value:", linkValue);
+
+            fetch(`/delete_social_media`, {
+                method: 'DELETE',  // Adjust the method based on your backend route
+                headers: {
+                    'Content-Type': 'application/json',
+                    // You may need to include additional headers, like authentication headers
+                },
+                body: JSON.stringify({ link: linkValue })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to delete social media account');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Social media account deleted successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error deleting social media account:', error.message);
+            });
+
+            field.parentNode.removeChild(field);
+
+        }
+    </script>
+</header>
+{% endblock %}

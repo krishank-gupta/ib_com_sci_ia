@@ -1,0 +1,113 @@
+<title>Profile |  {{username}}</title>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: {{profile.background_color}} !important;
+            color: {{profile.text_color}} !important;
+        }
+
+        .header {
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .content {
+            margin-top: 80px; /* Adjust the margin based on your header height */
+            padding: 20px;
+        }
+
+        .links {
+            display: block;
+            margin-bottom: 10px;
+            text-decoration: none;
+            background-color: {{profile.button_color}} !important;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .links:hover {
+            background-color: {{profile.hover_color}} !important;
+        }
+
+        .post-card {
+            border: 1px solid #ddd;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        h1, h4 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+        }
+</style>
+
+{% block content %}
+<div class="header">
+    <h1>Welcome to {{username}}'s profile</h1>
+</div>
+
+<div class="content">
+
+    <h1>Social Media Accounts:</h1>
+    {% for social_media in profile.social_media_accounts %}
+        <a href="{{social_media.link}}" onclick="incrementClicks(this)" target="_blank" class="links button-round">{{social_media.platform}}</a>
+
+        <script>
+            function incrementClicks(button){
+                var field = button.parentNode;
+                a=button.href
+                console.log(a)
+
+                fetch('/click', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // You may need to include additional headers, like authentication headers
+                    },
+                    body: JSON.stringify({ link: a }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to increment clicks');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Social media account counted successfully:', data);
+                })
+                .catch(error => {
+                    console.error('Error counting social media account:', error.message);
+                });
+            }
+        </script>
+    {% endfor %}
+
+    <h1>Posts:</h1>
+    {% for post in posts %}
+        <div class="post-card">
+            <img src="{{ url_for('static', filename='post_images/' + post.image_name) }}" alt="Post Image">
+            <h1>{{ post.title }}</h1>
+            <p>Posted on: {{ post.timestamp }}</p>
+
+            <h4>{{ post.content }}</h4>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

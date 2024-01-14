@@ -1,0 +1,136 @@
+<title>Add Post | Connect Ninja</title>
+
+<style>
+    .right { 
+        margin-left: auto !important;
+        text-align: right !important;
+    }
+</style>
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row align-center">
+    <div class="col col-sm-3"></div>
+    <div class="col col-sm-6">
+
+        <div id="userList">
+            <label for="userSelect">Select User:</label>
+            <select id="userSelect"></select>
+        </div>
+    
+        <div id="messageContainer">
+            <textarea id="messageInput" placeholder="Type your message..."></textarea>
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    
+    </div>
+    <div class="col col-sm-3"></div>
+</div>
+
+<div id="messages"></div>
+<input type="hidden" name="current_user" value="{{current_user.username}}">
+
+{% for message, username in data %}
+    <div class="card">
+        <h3 class="card-title {% if username == current_user.username %}right{% endif %}">{{ username }} on {{ message.timestamp.strftime('%b %d, %Y %I:%M %p') }}</h3>
+        <p class="card-content {% if username == current_user.username %}right{% endif %}">{{ message.content }}</p>
+    </div>
+{% endfor %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        current_user = document.getElementsByName('current_user')[0].value
+        document.addEventListener("DOMContentLoaded", function() {
+            const socket = io.connect('http://127.0.0.1:5000'); // Change the URL accordingly
+        
+            // Fetch user list from the server
+            socket.emit('get_users');
+        
+            socket.on('user_list', function(users) {
+                const userSelect = document.getElementById('userSelect');
+                userSelect.innerHTML = "<option value='' selected disabled>Select User</option>";
+                socket.emit('join_room');
+
+                users.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user;
+                    option.text = user;
+                    userSelect.appendChild(option);
+                });
+            });
+            
+            socket.emit('join_room');
+
+            socket.on('message', function(data) {
+                console.log(data.sender,data.message,data.timestamp)
+                const messagesContainer = document.getElementById('messages');
+
+                const card = document.createElement('div');
+                card.className = 'card'
+                const cardTitle = document.createElement('h3');
+                //cardTitle.className = `card-title ${data.sender === current_user.username ? 'right' : ''}`;
+                cardTitle.className = `card-title`;
+                cardTitle.innerText = `${data.sender} on ${(data.timestamp)}`;
+
+                const cardContent = document.createElement('p');
+                //cardContent.className = `card-content ${data.sender === current_user.username ? 'right' : ''}`;
+                cardContent.className = `card-content`;
+                cardContent.innerText = data.message;
+
+                card.appendChild(cardTitle);
+                card.appendChild(cardContent);
+
+                messagesContainer.appendChild(card);
+
+                //cardTitle.innerText = `${data.sender} on ${(data.timestamp)}`;
+
+                //messagesContainer.innerHTML += `${data.sender}, ${data.message} on ${data.timestamp}`;
+                socket.emit('messages_sent')
+            });
+           
+        
+            window.sendMessage = function() {
+                const userSelect = document.getElementById('userSelect');
+                const messageInput = document.getElementById('messageInput');
+                const recipient = userSelect.value;
+                const message = messageInput.value;
+        
+                console.log(recipient, message, formatDateTime(), current_user);
+
+                
+                const messagesContainer = document.getElementById('messages');
+
+                const card = document.createElement('div');
+                card.className = 'card'
+                const cardTitle = document.createElement('h3');
+                cardTitle.className = `card-title right`;
+                cardTitle.innerText = `${current_user} on ${(formatDateTime())}`;
+
+                const cardContent = document.createElement('p');
+                cardContent.className = `card-content right`;
+                cardContent.innerText = message;
+
+                card.appendChild(cardTitle);
+                card.appendChild(cardContent);
+
+                messagesContainer.appendChild(card);
+
+
+                if (recipient && message) {
+                    socket.emit('send_message', { recipient, message });
+                    messageInput.value = '';
+                }
+            };
+        });
+        
+        function formatDateTime() {
+            date = new Date();
+            const options = { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+            return new Date(date).toLocaleString('en-US', options);
+        }
+        
+    </script>
+
+{% endblock %}

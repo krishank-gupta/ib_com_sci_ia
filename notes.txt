@@ -1,0 +1,13 @@
+Tables:
+    Users
+    Social Media
+    Messages
+    Profile Views
+
+TO DO:
+
+1. Messaging
+2. Signup errors
+3. Color errors
+
+secure images names

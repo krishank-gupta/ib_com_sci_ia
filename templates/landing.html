@@ -1,0 +1,32 @@
+
+<title>Welcome | Connect Ninja</title>
+
+{% extends "base.html" %}
+
+{% block content %}
+<header>
+    <h1 class="title">Connect Ninja</h1>
+    <h2 class="subtitle">Connecting businesses to clients.</h2>
+    <p class="disclaimer">*we are not affiliated to any of these businesses.</p>
+    <!-- <button class="get-started button button-primary button-large">Give, Now!</button> -->
+    <a class="scroll-down" href="#"></a>
+</header>
+    
+<section>  
+    Welcome to Connect Ninja. We are a platform that connects businesses to clients. We are currently in beta and are looking for businesses to join our platform. If you are a business owner, please <a href="/signup">register</a> your business with us.
+</section>
+
+<script>
+    $(document).ready(function() {
+
+        $('.scroll-down, .get-started').on('click', function(e) {
+            e.preventDefault()
+            $('html, body').animate({
+                scrollTop: $('section:first-of-type').offset().top
+            }, 300)
+        })
+
+    })
+</script>
+
+{% endblock %}

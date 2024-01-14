@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/styles.scss">
+    <!-- Fonts and CSS Reset -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
+
+    <!-- Mustard UI -->
+    <link rel="stylesheet" href="https://unpkg.com/mustard-ui@latest/dist/css/mustard-ui.min.css">
+
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+        {% include 'nav_logged_in.html' %}
+    {% else %}
+        {% include 'nav_not_logged_in.html' %}
+    {% endif %}
+    
+    {% block content %}{% endblock %}
+</body>
+</html>

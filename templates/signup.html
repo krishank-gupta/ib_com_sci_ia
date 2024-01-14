@@ -1,0 +1,38 @@
+<title>SignUp | Connect Ninja</title>
+<style>
+    body{
+        height: 100vh;
+    }
+</style>
+
+{% extends "base.html" %}
+
+{% block content %}
+<header>
+	<form action="" method="post" class="login_system_forms">
+        <div class="form-control">
+			<label>Email</label>
+			<input type="email" placeholder="Email" name="signup_email" id="signup_email">
+		</div>
+        <div class="form-control">
+			<label>Username</label>
+			<input type="text" placeholder="Username" name="signup_username" id="signup_username">
+		</div>
+		<div class="form-control">
+			<label>Password</label>
+			<input type="password" placeholder="password" name="signup_password" id="signup_password">
+		</div>
+		*by signing in you are accepting our 
+		<a style="color: #fff;" href="https://www.giz.de/en/downloads/giz2018-en-General-terms-and-conditions-of-contract-for-supplying-services-and-work.pdf">terms and conditions</a>
+		<div class="form-control align-center">
+			<input type="submit" value="submit">
+			<br>
+			<a href="/login" style="color: #fff;">Back to Login</a>
+			{% if message%}
+				<p>{{ message }}</p>
+			{% endif %}
+		</div>
+	</form>
+</header>
+ 
+{% endblock %}

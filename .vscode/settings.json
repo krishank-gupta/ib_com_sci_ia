@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "main",
+            "database": "${workspaceFolder:ib_com_sci_ia}/database/database.db"
+        }
+    ]
+}

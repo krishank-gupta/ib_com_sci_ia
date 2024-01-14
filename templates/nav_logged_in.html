@@ -1,0 +1,19 @@
+<nav>
+    <div class="nav-container">
+        <div class="nav-logo">
+            <a href="/">Connect Ninja</a>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="/static/qrcodes/{{current_user.username}}">
+                    QR Code
+                </a>
+            </li>
+            <li><a href="/create_profile">Create/Edit Profile</a></li>
+            <li><a href="/inbox">Inbox</a></li>
+            <li><a href="/new_post">New Post</a></li>
+            <li><a href="/logout">Logout from {{ current_user.username}}</a></li>
+            <li><a>Profile Views: {{current_user.profile.view_count}}</a></li>
+        </ul>
+    </div>
+</nav>

@@ -1,0 +1,38 @@
+:root {
+    /* Colors */
+    --main-bg-color: #8cd898;
+    --main-text-color: #010309;
+    --secondary-text-color: #f7f8ee;
+
+    /* Typography */
+    --main-typography: comi;
+}
+
+html, body {
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
+    font-family: open;
+    font-family: var(--main-typography) !important;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: var(--main-typography) !important;
+}
+
+header, .header {
+    background-color: var(--main-bg-color) !important;
+    color: var(--main-text-color) !important;
+}
+
+nav a{
+    color: var(--main-text-color) !important;
+}
+
+nav {
+    background-color: var(--main-bg-color) !important;
+    color: var(--main-text-color) !important;
+}
+
+.title, .subtitle, .disclaimer {
+    color: var(--main-text-color) !important;
+}

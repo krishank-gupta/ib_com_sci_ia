@@ -1,0 +1,23 @@
+<title>404 | Connect Ninja</title>
+<style>
+    :root {
+        --main-bg-color: #8cd898;
+    }
+    body{
+        height: 100vh;
+        background-color: var(--main-bg-color) !important;
+    }
+</style>
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<header>
+    <h1 style="font-size: 7.5rem; margin-bottom: 2rem;">404</h1>
+    <h1>Oops! Looks like we are lost!</h1>
+    <p>We are sorry, we couldn't find the page you were looking for.</p>
+    <a href="/">Travel Back Home</a>
+</header>
+ 
+{% endblock %}
